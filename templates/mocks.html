@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Mock Tests</h1>
+
+<form method="post">
+  <div class="field"><label>Date</label><input type="date" name="date" value="{{ today }}"></div>
+  {% for s in subjects %}
+  <div class="field">
+    <label>{{ s.name }} — questions asked</label>
+    <input type="number" step="1" min="0" name="{{ s.id }}_qs" placeholder="out of {{ s.max }}">
+    <label>{{ s.name }} — score obtained</label>
+    <input type="number" step="0.25" name="{{ s.id }}_score" placeholder="e.g. 12.75">
+  </div>
+  {% endfor %}
+  <button type="submit">Save mock test</button>
+</form>
+
+<hr>
+
+<h2>Section breakdown (latest)</h2>
+{% if section_chart %}
+  <img class="chart-img" src="{{ url_for('static', filename=section_chart) }}" alt="Section breakdown chart">
+{% else %}
+  <p>No mock tests logged yet.</p>
+{% endif %}
+
+<h2>History</h2>
+<table>
+  <tr><th>Date</th><th>Questions</th><th>Score</th></tr>
+  {% for m in mocks %}
+  <tr><td>{{ fmt_date(m.date) }}</td><td>{{ m.total_questions }}</td><td>{{ m.total_score }}</td></tr>
+  {% else %}
+  <tr><td colspan="3">No entries yet.</td></tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
